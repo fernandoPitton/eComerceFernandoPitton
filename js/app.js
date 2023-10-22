@@ -3,60 +3,14 @@ const verCarrito = document.getElementById("verCarrito");
 const ventanaCarrito = document.getElementById("ventanaCarrito");
 const contadorCarrito = document.getElementById("contadorCarrito");
 
-const productos = [
-    {
-        id: 1,
-        nombre: "tetris",
-        precio: 2000,
-        img: "./multimedia/img/tetris.png"
-    },
-    {
-        id: 2,
-        nombre: "auricular",
-        precio: 1000,
-        img: "./multimedia/img/auricular.jpeg"
-    },
-    {
-        id: 3,
-        nombre: "cargadorEncendedor",
-        precio: 500,
-        img: "./multimedia/img/cargencendedor.jpeg"
-    },
-    {
-        id: 4,
-        nombre: "cargadorSolar",
-        precio: 3000,
-        img: "./multimedia/img/cargsolar.jpeg"
-    },
-    {
-        id: 5,
-        nombre: "mochila",
-        precio: 2000,
-        img: "./multimedia/img/mochila.jpeg"
-    },
-    {
-        id: 6,
-        nombre: "parlante",
-        precio: 2000,
-        img: "./multimedia/img/parlante.jpeg"
-    },
-    {
-        id: 7,
-        nombre: "tablet",
-        precio: 5000,
-        img: "./multimedia/img/tablet.jpeg"
-    },
-    {
-        id: 8,
-        nombre: "teclado",
-        precio: 2000,
-        img: "./multimedia/img/teclado.jpeg"
-    },
-
-];
-
 //trae el localStorage los productos del carrito
 let carrito = JSON.parse(localStorage.getItem("carrito"))|| [];
+
+
+
+fetch('./productos.json')
+.then((response)=> response.json())
+.then((productos)=>{
 
 //crea las tarjetas con los productos 
 productos.forEach((producto) => {
@@ -95,6 +49,8 @@ productos.forEach((producto) => {
         guardarCarrito();
     })
 })
+})
+
 // guarda los pruductos del arrito en el localStorage
 const guardarCarrito = ()=>{
     localStorage.setItem("carrito",JSON.stringify(carrito));
@@ -130,6 +86,7 @@ const pintarCarrito = () => {
         <p>${producto.precio}$ </p>
         <p>cantidad= ${producto.cantidad} </p>
         <p>sub total= ${producto.precio * producto.cantidad}$</p>
+        
         `;
         ventanaCarrito.append(carritoContent);
         
@@ -153,6 +110,24 @@ const pintarCarrito = () => {
     totalCarrito.className = "totalCarrito";
     totalCarrito.innerHTML = `<h3>Total= ${total}$</h3>`
     ventanaCarrito.append(totalCarrito);
+
+// creo el boton para finalizar la compra y envio una alerta para confirmar al usuario
+    let finalizarCompra = document.createElement("button");
+    finalizarCompra.className = "botonFinalizarCompra";
+    finalizarCompra.innerText = "Finalizar Compra";
+    ventanaCarrito.append(finalizarCompra);
+    finalizarCompra.addEventListener("click",()=>{
+        carrito = [];
+        pintarCarrito();
+        pintarContadorCarrito();
+        guardarCarrito();
+        Swal.fire(
+            'Compra Realizada!',
+            'Presione OK para volver al sitio!',
+            'success'
+          )
+          ventanaCarrito.style.display = "none";
+    })
 }
 
 

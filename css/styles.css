@@ -257,6 +257,16 @@ body {
 .totalCarrito {
     display: flex;
     justify-content: center;
+    margin-top: 20px;
+    
+}
+
+.botonFinalizarCompra {
+    
+    margin: 20px;
+   
+    cursor: pointer;
+
 }
 
 .contadorCarrito {
